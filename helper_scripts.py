@@ -15,13 +15,37 @@ def check_null_params(param_dict:dict):
         #  if url parameter checks passed
         return {'valid':True, 
                 'data': None}  
+
+def get_missing_params():
+    """
+    Gets all missing parameter in query
+    """
+    required_parameters = [ 'latitude1', 'latitude2', 'longitude1', 'longitude2']
+    missing_parameters = []
+    # separate missing parameters 
+    for key in required_parameters:
+        if request.args.get(key)==None:
+            missing_parameters.append(key)
+    
+    # Return unavailable params
+    if len(missing_parameters)>0:
+        return missing_parameters
+    else:
+        return None
+    
+
+
+
+
         
 
 def valid_location_params(location_params):
     '''
-    return 
+    For validating input (types checking and error handling)
     
     '''
+# check for missing parameters
+
     validate = check_null_params(location_params)
     # 
     if validate['valid']==False:
@@ -81,7 +105,6 @@ def valid_location_params(location_params):
 
 
 def get_location_params():
-    
         # get query paramers for url (longitude & latitude) 
         # "type=int" for type checking [returns None for wrong type or if missing]
 
@@ -96,8 +119,19 @@ def get_location_params():
         'latitude2': latitude2,
         'longitude2': longitude2
     }
-    # validate parameters
-    return valid_location_params(location_params)
+
+# first check for missing parameters
+    missing_params = get_missing_params()
+
+    if missing_params==None:
+        # perform validation parameters
+        return valid_location_params(location_params)
+    else:
+        return {'is_valid': False,
+                    "data": " Missing Value(s) "+ str(missing_params)
+                    }
+
+    
         
 
 
