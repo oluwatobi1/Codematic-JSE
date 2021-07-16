@@ -11,6 +11,7 @@ def great_circle_distance():
         latitude1, latitude2, longitude1, longitude2  = url_location_params["data"]
 
         distance = helper_scripts.calculate_distance(latitude1, latitude2, longitude1, longitude2)
+        
         return jsonify(distance), 200
     else:
         error_message = url_location_params["data"]
