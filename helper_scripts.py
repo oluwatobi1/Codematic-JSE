@@ -5,8 +5,8 @@ import requests
 
 
 
-def validate_url_params(param_dict:dict):    
-        # checks for invalid types
+def check_null_params(param_dict:dict):    
+        # checks for null types
         for data in param_dict:
             if param_dict[data] == None:
                 return {'valid':False,
@@ -17,12 +17,73 @@ def validate_url_params(param_dict:dict):
                 'data': None}  
         
 
+def valid_location_params(location_params):
+    '''
+    return 
+    
+    '''
+    validate = check_null_params(location_params)
+    # 
+    if validate['valid']==False:
+        invalid_parameter = request.args.get(validate['data'])
+        print("param", invalid_parameter)
+
+        # if parameter is missing in query           
+        if invalid_parameter==None:
+            return {'is_valid': validate['valid'],
+                    "data": validate['data'] + " is required "
+                    }
+        # for empty values
+        elif len(str(invalid_parameter))<1:
+            return {'is_valid': validate['valid'],
+                    "data": validate['data'] +" Empty input value"
+                    }
+        # wrong types
+        else:
+            return {'is_valid': validate['valid'],
+                    "data": validate['data'] + "- Wrong input data (accepts integer type) "
+                    }
+
+    else:
+        max_latitude_value = 90
+        min_latitude_value = -90
+
+        max_longitude_value = 180
+        min_longitude_value = -180
+        
+        # check if latitude inputs are within allowed range (-90 to 90)
+        if ((location_params['latitude1']>max_latitude_value or location_params['latitude1']<min_latitude_value) or 
+        (location_params['latitude2']>max_latitude_value or location_params['latitude2']<min_latitude_value)):
+
+            validate['valid'] = False
+            return {'is_valid': validate['valid'],
+                    "data": " Values of latitudes must fall within -90 to 90"
+                    }
+
+        # check if longitude inputs are within allowed range (-180 to 180)
+        elif ((location_params['longitude1']>max_longitude_value or location_params['longitude1']<min_longitude_value) or 
+        (location_params['longitude2']>max_longitude_value or location_params['longitude2']<min_longitude_value)):
+            
+            validate['valid']=False
+            return {'is_valid': validate['valid'],
+                    "data": " Values of longitudes must fall within -180 to 180"
+                    }
+
+        else:
+            return {"is_valid": validate['valid'],
+                    "data":[
+                        location_params['latitude1'], 
+                        location_params['latitude2'],
+                        location_params['longitude1'],
+                        location_params['longitude2'] 
+                        ]}
+
+
 
 def get_location_params():
     if request.method == "GET":
         # get query paramers for url (longitude & latitude) 
         # "type=int" for type checking [returns None for wrong type or if missing]
-        is_valid = False
 
         longitude1 = request.args.get('longitude1', type=int)
         longitude2 = request.args.get('longitude2', type=int)
@@ -36,37 +97,9 @@ def get_location_params():
             'longitude2': longitude2
         }
         # validate parameters
-        validate = validate_url_params(location_params)
+        return valid_location_params(location_params)
+        
 
-        if validate['valid']==False:
-            invalid_parameter = request.args.get(validate['data'])
-            print("param", invalid_parameter)
-
-            # if parameter is missing in query           
-            if invalid_parameter==None:
-                return {'is_valid': validate['valid'],
-                        "data": validate['data'] + " is required "
-                        }
-            # for empty values
-            elif len(str(invalid_parameter))<1:
-                return {'is_valid': validate['valid'],
-                        "data": "Empty value for '/" +validate['data'] + "'/ "
-                        }
-            # wrong types
-            else:
-                return {'is_valid': validate['valid'],
-                        "data": validate['data'] + ": Wrong datatype (accepts integer value) "
-                        }
-
-        else:
-            
-            return {"is_valid": validate['valid'],
-                    "data":[
-                            location_params['latitude1'], 
-                            location_params['latitude2'],
-                            location_params['longitude1'],
-                            location_params['longitude2'] 
-                            ]}
 
 
 def calculate_distance(latitude1, latitude2, longitude1, longitude2):
@@ -98,11 +131,3 @@ def calculate_distance(latitude1, latitude2, longitude1, longitude2):
     return distance
 
 
-
-
-
-
-
-
-
- 
