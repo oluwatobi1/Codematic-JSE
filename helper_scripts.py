@@ -1,24 +1,38 @@
 from flask import request
 import math
-
 import requests
 
 
+def check_null_params(param_dict:dict):
+    '''
+    Check if url parameters contain null types
 
-def check_null_params(param_dict:dict):    
-        # checks for null types
-        for data in param_dict:
-            if param_dict[data] == None:
-                return {'valid':False,
-                        'data': data}           
+    Parameters:
+    param_dict (dict): Contain 4 coordinates of location data
 
-        #  if url parameter checks passed
-        return {'valid':True, 
-                'data': None}  
+    Returns:
+    dict:
+        valid: Boolean
+        data: Return input parameter or nones
+    
+    '''
+
+    # checks for null types
+    for data in param_dict:
+        if param_dict[data] == None:
+            return {'valid':False,
+                    'data': data}           
+
+    #  if url parameter checks passed
+    return {'valid':True, 
+            'data': None}  
 
 def get_missing_params():
     """
     Gets all missing parameter in query
+
+    Returns:
+    list|None: Returns the list of parameters missing from url query or None if complete
     """
     required_parameters = [ 'latitude1', 'latitude2', 'longitude1', 'longitude2']
     missing_parameters = []
@@ -27,25 +41,28 @@ def get_missing_params():
         if request.args.get(key)==None:
             missing_parameters.append(key)
     
-    # Return unavailable params
+    # Return unavailable params or none
     if len(missing_parameters)>0:
         return missing_parameters
     else:
         return None
-    
-
-
-
-
-        
+     
 
 def valid_location_params(location_params):
     '''
     For validating input (types checking and error handling)
+
+    Parameters:
+    location_params(dict): Input dictionary containing 2 longitude, and 2 latitude key value pair
+
+    Returns:
+    dict: 
+        is_valid (Boolean): True or False
+        data (str, dict): Can contain validation message on failure and Location data on success
     
     '''
-# check for missing parameters
 
+# check for missing parameters
     validate = check_null_params(location_params)
     # 
     if validate['valid']==False:
@@ -105,9 +122,17 @@ def valid_location_params(location_params):
 
 
 def get_location_params():
-        # get query paramers for url (longitude & latitude) 
-        # "type=int" for type checking [returns None for wrong type or if missing]
+    '''
+    Extracts query parameters from url (longitude & latitude) 
 
+    Returns:
+    dict: 
+        is_valid (Boolean): True or False
+        data (str, dict): Can contain validation message or Location data respectively
+    
+    '''
+
+    # "type=int" - type checking [returns None for wrong type or if missing]
     longitude1 = request.args.get('longitude1', type=int)
     longitude2 = request.args.get('longitude2', type=int)
     latitude1 = request.args.get('latitude1', type=int)
@@ -131,10 +156,6 @@ def get_location_params():
                     "data": " Missing Value(s) "+ str(missing_params)
                     }
 
-    
-        
-
-
 
 def calculate_distance(latitude1, latitude2, longitude1, longitude2):
     '''
@@ -143,11 +164,15 @@ def calculate_distance(latitude1, latitude2, longitude1, longitude2):
 
         distance = 2 ⋅ R ⋅ arcsin√(sin²(Δφ/2) + cos φ1 ⋅cosφ2 ⋅sin²(Δλ/2))
     
-    -where φ is latitude, λ is longitude,
+    Parameters:
+    -φ is latitude, λ is longitude,
     -R is earth’s radius (mean radius = 6,371km);
     -Δ is delta. i.e the difference between 2 values.
     
     Note that angles need to be in radians to pass trigfunctions in the formula. PI = 3.142
+
+    Returns:
+    int: calculated distance
     '''
     R = 6371
     lat1, lat2, long1, long2 = latitude1, latitude2, longitude1, longitude2
