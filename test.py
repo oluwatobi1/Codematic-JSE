@@ -35,9 +35,7 @@ response = requests.get(BASE+"?latitude1=abcd&longitude1=42&latitude2=33&longitu
 print("Response ", response.json())
 
 
-
-
-#################### logic ##########
+#################### logical tests ##########
 print("Case 8... all Zero input")
 response = requests.get(BASE+"?latitude1=0&longitude1=0&latitude2=0&longitude2=0")
 print("Response ", response.json())
