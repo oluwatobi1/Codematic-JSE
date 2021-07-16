@@ -12,8 +12,12 @@ def great_circle_distance():
             latitude1, latitude2, longitude1, longitude2  = url_location_params["data"]
             # calculate distance from helper
             distance = helper_scripts.calculate_distance(latitude1, latitude2, longitude1, longitude2)
-            
-            return jsonify(distance), 200
+
+            # round to 2dp
+            response = str(round(distance,2))+ " KM"
+
+
+            return jsonify(response), 200
         else:
             # return error from helper
             error_message = url_location_params["data"]
@@ -22,8 +26,8 @@ def great_circle_distance():
     
   
 
-# if __name__ == "__main__":
-#     app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)
     
 
        
