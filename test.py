@@ -8,7 +8,7 @@ print("Test Cases...")
 
 print("Case 1... Given test case")
 response = requests.get(BASE+"?latitude1=55&longitude1=42&latitude2=33&longitude2=89")
-print("Response ", response.text)
+print("Response ", response.json())
 
 print("Case 2... No Input Parameters")
 response = requests.get(BASE+"")
