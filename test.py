@@ -8,7 +8,7 @@ print("Test Cases...")
 
 print("Case 1... Given test case")
 response = requests.get(BASE+"?latitude1=55&longitude1=42&latitude2=33&longitude2=89")
-print("Response ", response.json())
+print("Response ", response.text)
 
 print("Case 2... No Input Parameters")
 response = requests.get(BASE+"")
@@ -34,9 +34,14 @@ print("Case 7... String query Parameters (None)")
 response = requests.get(BASE+"?latitude1=abcd&longitude1=42&latitude2=33&longitude2=")
 print("Response ", response.json())
 
+
+
+
+#################### logic ##########
 print("Case 8... all Zero input")
 response = requests.get(BASE+"?latitude1=0&longitude1=0&latitude2=0&longitude2=0")
 print("Response ", response.json())
+
 
 print("Case 8...  small negative input")
 response = requests.get(BASE+"?latitude1=-10&longitude1=0.00000000001&latitude2=0.001&longitude2=0.11111")
