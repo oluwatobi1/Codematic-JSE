@@ -81,23 +81,23 @@ def valid_location_params(location_params):
 
 
 def get_location_params():
-    if request.method == "GET":
+    
         # get query paramers for url (longitude & latitude) 
         # "type=int" for type checking [returns None for wrong type or if missing]
 
-        longitude1 = request.args.get('longitude1', type=int)
-        longitude2 = request.args.get('longitude2', type=int)
-        latitude1 = request.args.get('latitude1', type=int)
-        latitude2 = request.args.get('latitude2', type=int)
+    longitude1 = request.args.get('longitude1', type=int)
+    longitude2 = request.args.get('longitude2', type=int)
+    latitude1 = request.args.get('latitude1', type=int)
+    latitude2 = request.args.get('latitude2', type=int)
 
-        location_params = {
-            'latitude1': latitude1,
-            'longitude1': longitude1,
-            'latitude2': latitude2,
-            'longitude2': longitude2
-        }
-        # validate parameters
-        return valid_location_params(location_params)
+    location_params = {
+        'latitude1': latitude1,
+        'longitude1': longitude1,
+        'latitude2': latitude2,
+        'longitude2': longitude2
+    }
+    # validate parameters
+    return valid_location_params(location_params)
         
 
 
