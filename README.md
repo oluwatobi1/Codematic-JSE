@@ -12,7 +12,7 @@
   
 *  **URL Params**
 
-   _URL params are, specified in accordance with 0the name mentioned in URL section._
+   _URL params are, specified in accordance with the name mentioned below._
 
    **Required:**
  
