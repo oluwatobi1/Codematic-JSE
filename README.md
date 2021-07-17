@@ -12,7 +12,7 @@
   
 *  **URL Params**
 
-   _If URL params exist, specify them in accordance with name mentioned in URL section. Separate into optional and required. Document data constraints._
+   _URL params are, specified in accordance with 0the name mentioned in URL section._
 
    **Required:**
  
